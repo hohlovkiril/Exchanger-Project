@@ -1,0 +1,1 @@
+export const CHAT_APP_DRAWER_WIDTH = '240px';

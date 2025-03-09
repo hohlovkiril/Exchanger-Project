@@ -1,0 +1,16 @@
+{
+  "name": "exchanger-project",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "shared/*"
+  ],
+  "scripts": {
+    "start:server:dev": "yarn workspace server run start:dev",
+    "start:server:terminal": "yarn workspace server run start:terminal",
+    "start:dashboard": "yarn workspace dashboard run start"
+  }
+}

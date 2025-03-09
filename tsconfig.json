@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@shared/enums": ["shared/enums/src"]
+    }
+  }
+}
