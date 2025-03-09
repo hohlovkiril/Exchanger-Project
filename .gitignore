@@ -8,7 +8,7 @@ apps/*/dist/
 apps/*/build/
 shared/*/dist/
 shared/*/build/
-
+/env
 # Logs
 logs
 *.log
