@@ -117,6 +117,7 @@ export const defaultLocalization: Localization = {
       'page_title_by_path_/currency': 'Валюта',
       'page_title_by_path_/currency/create': 'Создать Валюту',
       'page_title_by_path_/rate': 'Курс',
+      'page_title_by_path_/notifications': 'Уведомления',
       'page_title_by_path_/profile': 'Профиль',
       'page_title_by_path_/profile/account': 'Профиль',
       'page_title_by_path_/profile/change-password': 'Смена пароля',
@@ -127,6 +128,7 @@ export const defaultLocalization: Localization = {
       'page_breadcrumb_by_path_/currency': 'Валюта',
       'page_breadcrumb_by_path_/currency/create': 'Создать Валюту',
       'page_breadcrumb_by_path_/rate': 'Курс',
+      'page_breadcrumb_by_path_/notifications': 'Уведомления',
       'page_breadcrumb_by_path_/profile': 'Профиль',
       'page_breadcrumb_by_path_/profile/account': 'Профиль',
       'page_breadcrumb_by_path_/profile/change-password': 'Смена пароля',
@@ -154,10 +156,6 @@ export const defaultLocalization: Localization = {
       'page__profile_tab_settings': 'Настройки',
 
       'page__profile_card_my_account_general_settings_title': 'Главные настройки',
-      // 'page__profile_card_my_account_general_settings_username': 'Account Useme',
-      // 'page__profile_card_my_account_general_settings_email': 'Account Email',
-      // 'page__profile_card_my_account_general_settings_first_name': 'First Name',
-      // 'page__profile_card_my_account_general_settings_last_name': 'Last Name',
 
       'page__profile_card_change_password_title': 'Смена пароля',
       'page__profile_card_change_password_old_password': 'Старый пароль',

@@ -12,6 +12,7 @@ import {
   RateCreatePage,
   RateEditPage,
 } from '../pages/Rate';
+import NotificationPage from "../pages/Notification";
 import ProfilePage from "../pages/Profile";
 import SettingsPage from "../pages/Settings";
 import NotFoundPage from "../pages/NotFound";
@@ -97,6 +98,20 @@ export const ROUTES: RouteType[] = [
         regex: /^\/rate\/edit\/\d+$/,
         path: '/edit/:id',
         element: <RateEditPage />,
+      }
+    ]
+  },
+  {
+    isPrivate: true,
+    title: 'Notifications',
+    segment: '/notifications',
+    path: '/notifications',
+    element: [
+      {
+        title: '',
+        segment: '/',
+        path: '/',
+        element: <NotificationPage />
       }
     ]
   },

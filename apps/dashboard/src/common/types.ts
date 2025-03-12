@@ -104,6 +104,7 @@ export type NotificationType = {
   id: number;
   variant: NotificationVariants;
   text: string;
+  checked: boolean;
   createdAt: Date;
 }
 

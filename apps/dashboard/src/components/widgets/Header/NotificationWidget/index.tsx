@@ -30,11 +30,13 @@ import {
 import { formatDate, formatPastDate } from '../utils';
 import { useNotificationApi } from '../../../../providers/notification.provider';
 import { NotificationVariants } from '@shared/enums';
+import { useNavigate } from 'react-router-dom';
 
 export default function NotificationWidget() {
 
   /** Context */
 
+  const navigate = useNavigate();
   const { t } = useTranslation();
   const { notifications } = useNotificationApi();
 
@@ -81,7 +83,7 @@ export default function NotificationWidget() {
     <>
       <IconButton
         enableBadge={{
-          content: notifications.length,
+          content: notifications.filter((noty) => noty.checked).length,
           color: 'primary'
         }}
         enableTooltip={{
@@ -216,6 +218,10 @@ export default function NotificationWidget() {
               sx={{
                 padding: '1em',
                 width: '100%',
+              }}
+              onClick={() => {
+                navigate('/notifications');
+                handleClose();
               }}
             >
               {t('header__widget_notification_btn_view_all', { defaultValue: 'View All' })}
