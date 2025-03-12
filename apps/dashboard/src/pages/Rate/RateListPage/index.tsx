@@ -22,11 +22,14 @@ import { DataView } from "../../../components/widgets";
 import { IDataViewColumnsConfig } from "../../../components/widgets/DataView/common";
 import { InputAdornment } from "@mui/material";
 import { Chip } from "../../../components/ui/DataDisplay";
+import RateApi from '../../../services/api/rate.api';
+import { useTranslation } from 'react-i18next';
 
 export default function RateListPage() {
 
   /** Context */
   
+  const { t } = useTranslation();
   const { token } = useAuth();
 
   /** States */
@@ -42,15 +45,13 @@ export default function RateListPage() {
 
     if (loaded) return;
 
-    fetch('http://localhost:3030/api/rate', {
-      method: 'GET',
-      headers: new Headers({
-        'Authorization': `Bearer ${token}`
-      })
-    })
-    .then((res) => res.json())
-    .then((data) => setData(data))
-    .finally(() => setLoaded(true));
+    const timer = setTimeout(() => {
+      RateApi.getMany(token)
+        .then((data) => setData(data))
+        .finally(() => setLoaded(true));
+    }, 250)
+
+    return () => clearTimeout(timer);
   }, [token, loaded])
 
   /** Vars */
@@ -67,7 +68,7 @@ export default function RateListPage() {
       align: 'center',
       renderCell: (row) => (
         <Chip
-          label={`${row.clientCurrencyBuy.symbol}-${row.clientCurrencySell.symbol}`}
+          label={`${row.symbol}`}
         />
       )
     },
@@ -94,7 +95,7 @@ export default function RateListPage() {
     },
     {
       id: 'autoUpdatePrice',
-      label: 'API Price',
+      label: 'API Auto Update Price',
       align: 'center',
       renderCell: (row) => (
         <Chip
@@ -173,13 +174,13 @@ export default function RateListPage() {
                   alignItems='center'
                   gap={1}
                 >
-                  <Link to="/currency/create">
+                  <Link to="/rate/create">
                     <Button
                       variant='contained'
                       color='primary'
                       startIcon={<AddIcon />}
                     >
-                      Add Currency
+                      {t('page__rate_list_btn_add', { defaultValue: 'Add Rate' })}
                     </Button>
                   </Link>
                   <Button
@@ -188,7 +189,7 @@ export default function RateListPage() {
                     startIcon={<RestartAltIcon />}
                     onClick={() => setLoaded(false)}
                   >
-                    Refresh
+                    {t('page__rate_list_btn_refresh', { defaultValue: 'Refresh' })}
                   </Button>
                 </Stack>
 

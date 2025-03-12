@@ -1,14 +1,11 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSnackbar } from "notistack";
 
 import {
   AuthApi,
   StorageService,
 } from '../services';
 import { UserType } from "../common/types";
-import { demoUser } from "../common/data";
 
 interface IAuthContext {
   isAuth: boolean;
@@ -29,7 +26,6 @@ export const AuthProvider: React.FC<IAuthProvider> = ({ children }) => {
   /** Context */
   
   const navigate = useNavigate();
-  const { enqueueSnackbar } = useSnackbar();
   
   /** States */
 

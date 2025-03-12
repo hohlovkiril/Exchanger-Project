@@ -3,7 +3,9 @@ import { useTranslation } from 'react-i18next';
 
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
+import WarningAmberIcon from '@mui/icons-material/WarningAmber';
+import ReportGmailerrorredIcon from '@mui/icons-material/ReportGmailerrorred';
+import InfoIcon from '@mui/icons-material/Info';
 
 import {
   ListItemIcon,
@@ -26,18 +28,19 @@ import {
   Stack,
 } from '../../../ui/Surfaces'
 import { formatDate, formatPastDate } from '../utils';
+import { useNotificationApi } from '../../../../providers/notification.provider';
+import { NotificationVariants } from '@shared/enums';
 
 export default function NotificationWidget() {
 
   /** Context */
 
   const { t } = useTranslation();
+  const { notifications } = useNotificationApi();
 
   /** States */
 
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [data, setData] = useState<any[]>([]);
 
   /** Handlers */
   
@@ -78,7 +81,7 @@ export default function NotificationWidget() {
     <>
       <IconButton
         enableBadge={{
-          content: data.length,
+          content: notifications.length,
           color: 'primary'
         }}
         enableTooltip={{
@@ -114,22 +117,24 @@ export default function NotificationWidget() {
         }}
         paperProps={{
           sx: {
-            minWidth: '300px',
+            minWidth: '340px',
           }
         }}
       >
 
-        {false ? (
+        {notifications ? (
           <>
             <List
               sx={{
+                maxHeight: '200px',
+                overflowY: 'auto',
                 padding: '0',
                 '& .MuiTouchRipple-root': {
                   borderRadius: '0'
                 }
               }}
             >
-              {Array(3).fill(null).map((noty, key) => (
+              {notifications.map((noty, key) => (
                 <ListItem
                   key={key}
                   disablePadding
@@ -137,19 +142,31 @@ export default function NotificationWidget() {
                     <Typography
                       variant='caption'
                     >
-                      {formatDate(new Date('03.05.2025 12:55'))}
+                      {formatDate(new Date(noty.createdAt))}
                     </Typography>
                   )}
                 >
                   <ListItemButton>
                     <ListItemIcon>
-                      <NotificationsActiveIcon />
+                      {noty.variant === NotificationVariants.Success ? (
+                        <CheckCircleOutlineIcon color='success' />
+                      ) : noty.variant === NotificationVariants.Warning ? (
+                        <WarningAmberIcon color='warning' />
+                      ) : noty.variant === NotificationVariants.Error ? (
+                        <ReportGmailerrorredIcon color='error' />
+                      ) : (
+                        <InfoIcon color='primary' />
+                      )}
                     </ListItemIcon>
                     <ListItemText
-                      primary='Test'
-                      secondary={formatPastDate(new Date('03.05.2025 12:55'))}
+                      primary={noty.text}
+                      secondary={formatPastDate(new Date(noty.createdAt))}
                       sx={{
                         '& .MuiListItemText-primary': {
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                          maxWidth: '160px',
                           fontSize: 'clamp(10px, 2vw, 12px)',
                         },
                         '& .MuiListItemText-secondary': {
@@ -159,6 +176,35 @@ export default function NotificationWidget() {
                     />
                   </ListItemButton>
                 </ListItem>
+                // <ListItem
+                //   key={key}
+                //   disablePadding
+                //   secondaryAction={(
+                //     <Typography
+                //       variant='caption'
+                //     >
+                //       {formatDate(new Date('03.05.2025 12:55'))}
+                //     </Typography>
+                //   )}
+                // >
+                //   <ListItemButton>
+                //     <ListItemIcon>
+                //       <NotificationsActiveIcon />
+                //     </ListItemIcon>
+                //     <ListItemText
+                //       primary='Test'
+                //       secondary={formatPastDate(new Date('03.05.2025 12:55'))}
+                //       sx={{
+                //         '& .MuiListItemText-primary': {
+                //           fontSize: 'clamp(10px, 2vw, 12px)',
+                //         },
+                //         '& .MuiListItemText-secondary': {
+                //           fontSize: 'clamp(8px, 2vw, 10px)',
+                //         },
+                //       }}
+                //     />
+                //   </ListItemButton>
+                // </ListItem>
               ))}
             </List>
 

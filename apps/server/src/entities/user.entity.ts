@@ -1,6 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, BeforeUpdate, BeforeInsert } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, JoinColumn, BeforeUpdate, BeforeInsert, OneToMany } from 'typeorm';
 import { Permission, Role } from 'src/common';
 import { MediaEntity } from './media.entity';
+import { OrderEntity } from './order.entity';
 
 @Entity({
   name: 'user'
@@ -62,6 +63,9 @@ export class UserEntity {
   @OneToOne(() => MediaEntity, (media) => media.user, { onDelete: 'SET NULL', nullable: true })
   @JoinColumn()
   avatar: MediaEntity;
+  
+  @OneToMany(() => OrderEntity, (order) => order.client, { cascade: true })
+  orders: OrderEntity[];
 
   /** Actions */
 

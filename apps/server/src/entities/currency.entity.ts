@@ -1,5 +1,5 @@
 import { CurrencyType } from "src/common";
-import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { BeforeInsert, BeforeUpdate, Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { RateEntity } from "./rate.entity";
 import { MediaEntity } from "./media.entity";
 
@@ -13,8 +13,11 @@ export class CurrencyEntity {
   @Column({ type: 'text', unique: true, nullable: false, })
   label: string;
 
-  @Column({ type: 'text', unique: false, nullable: false })
+  @Column({ type: 'text', unique: true, nullable: false })
   symbol: string;
+
+  @Column({ type: 'text', unique: false, nullable: true })
+  apiSymbol: string;
 
   @Column({ type: 'int', nullable: false, default: 10, })
   precision: number;
@@ -45,4 +48,17 @@ export class CurrencyEntity {
 
   @OneToMany(() => RateEntity, (rate) => rate.clientCurrencySell, { cascade: true })
   sellRates: RateEntity[];
+
+  /** Actions */
+
+  @BeforeInsert()
+  setSymbols() {
+    this.symbol = this.symbol.toLocaleLowerCase();
+    this.apiSymbol = this.apiSymbol.toLocaleLowerCase();
+  }
+
+  @BeforeUpdate()
+  updateSymbols() {
+    this.setSymbols();
+  }
 }

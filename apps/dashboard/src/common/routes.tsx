@@ -4,10 +4,13 @@ import LogInPage from "../pages/LogIn";
 import HomePage from "../pages/Home";
 import {
   CurrencyListPage,
+  CurrencyCreatePage,
   CurrencyEditPage,
 } from '../pages/Currency';
 import {
   RateListPage,
+  RateCreatePage,
+  RateEditPage,
 } from '../pages/Rate';
 import ProfilePage from "../pages/Profile";
 import SettingsPage from "../pages/Settings";
@@ -47,6 +50,12 @@ export const ROUTES: RouteType[] = [
         element: <CurrencyListPage />,
       },
       {
+        title: 'Create New Currency',
+        segment: '/create',
+        path: '/create',
+        element: <CurrencyCreatePage />,
+      },
+      {
         title: 'Edit',
         breadcrumb: {
           label: 'Edit',
@@ -72,6 +81,22 @@ export const ROUTES: RouteType[] = [
         segment: '/',
         path: '/',
         element: <RateListPage />,
+      },
+      {
+        title: 'Create New Rate',
+        segment: '/create',
+        path: '/create',
+        element: <RateCreatePage />,
+      },
+      {
+        title: 'Edit',
+        breadcrumb: {
+          label: 'Edit',
+        },
+        segment: '/edit/:id',
+        regex: /^\/rate\/edit\/\d+$/,
+        path: '/edit/:id',
+        element: <RateEditPage />,
       }
     ]
   },

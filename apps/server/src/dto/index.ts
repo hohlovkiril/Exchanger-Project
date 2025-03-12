@@ -16,6 +16,14 @@ import {
   RateCreateDto,
   RateUpdateDto,
 } from './rate'
+import {
+  OrderGetManyDto,
+  OrderCreateDto,
+  OrderUpdateDto,
+} from './order'
+import {
+  NotificationGetManyDto,
+} from './notification'
 
 export {
   AuthLoginDto,
@@ -28,4 +36,8 @@ export {
   RateGetManyDto,
   RateCreateDto,
   RateUpdateDto,
+  OrderGetManyDto,
+  OrderCreateDto,
+  OrderUpdateDto,
+  NotificationGetManyDto,
 }

@@ -1,7 +1,7 @@
 "use strict";
 // Authorization 
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.OrderStatus = exports.CurrencyType = exports.Permission = exports.Role = void 0;
+exports.OrderStatus = exports.CurrencyType = exports.NotificationVariants = exports.Permission = exports.Role = void 0;
 var Role;
 (function (Role) {
     Role[Role["Root"] = 0] = "Root";
@@ -12,6 +12,14 @@ var Role;
 var Permission;
 (function (Permission) {
 })(Permission || (exports.Permission = Permission = {}));
+// Notification
+var NotificationVariants;
+(function (NotificationVariants) {
+    NotificationVariants[NotificationVariants["Info"] = 0] = "Info";
+    NotificationVariants[NotificationVariants["Success"] = 1] = "Success";
+    NotificationVariants[NotificationVariants["Warning"] = 2] = "Warning";
+    NotificationVariants[NotificationVariants["Error"] = 3] = "Error";
+})(NotificationVariants || (exports.NotificationVariants = NotificationVariants = {}));
 // Currency
 var CurrencyType;
 (function (CurrencyType) {

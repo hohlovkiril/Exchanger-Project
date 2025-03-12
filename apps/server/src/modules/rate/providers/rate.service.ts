@@ -1,7 +1,10 @@
 import { BadRequestException, forwardRef, Inject, Injectable, Logger, NotFoundException } from "@nestjs/common";
+import { EventEmitter2 } from "@nestjs/event-emitter";
 import { InjectRepository } from "@nestjs/typeorm";
+import { NotificationVariants } from "@shared/enums";
 import { RateCreateDto, RateGetManyDto, RateUpdateDto } from "src/dto";
 import { RateEntity } from "src/entities";
+import { NotificationCreateEvent } from "src/events";
 import { CurrencyService } from "src/modules/currency/providers/currency.service";
 import { Repository, SelectQueryBuilder } from "typeorm";
 
@@ -15,6 +18,7 @@ export class RateService {
     private readonly repository: Repository<RateEntity>,
     @Inject(forwardRef(() => CurrencyService))
     private readonly currencyService: CurrencyService,
+    private readonly eventEmitter: EventEmitter2,
   ) {}
 
   private async createBuilder(): Promise<SelectQueryBuilder<RateEntity>> {
@@ -73,8 +77,18 @@ export class RateService {
     newRate.autoUpdatePrice = payload.autoUpdatePrice;
     newRate.clientCurrencyBuy = clientCurrencyBuy;
     newRate.clientCurrencySell = clientCurrencySell;
+    
+    const savedRate = await this.repository.save(newRate);
 
-    return await this.repository.save(newRate);
+    const event = new NotificationCreateEvent(
+      `New Rate: ${newRate.symbol} Created!`,
+      undefined,
+      NotificationVariants.Info,
+    );
+
+    this.eventEmitter.emit('notification.create', event);
+
+    return savedRate;
   }
 
   public async update(id: number, payload: RateUpdateDto): Promise<RateEntity> {
@@ -92,7 +106,17 @@ export class RateService {
       rate.autoUpdatePrice = payload.autoUpdatePrice;
     }
 
-    return await this.repository.save(rate);
+    const savedRate = await this.repository.save(rate);
+
+    const event = new NotificationCreateEvent(
+      `Rate: ${rate.symbol} Updated!`,
+      undefined,
+      NotificationVariants.Info
+    );
+
+    this.eventEmitter.emit('notification.create', event);
+
+    return rate;
   }
 
   public async remove(id: number): Promise<RateEntity> {

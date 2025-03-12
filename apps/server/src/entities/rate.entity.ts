@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { BeforeInsert, BeforeUpdate, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { CurrencyEntity } from "./currency.entity";
 
 @Entity({
@@ -7,6 +7,9 @@ import { CurrencyEntity } from "./currency.entity";
 export class RateEntity {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column({ type: 'text', unique: true })
+  symbol: string;
 
   @Column({ type: 'boolean', default: false })
   status: boolean;
@@ -26,4 +29,16 @@ export class RateEntity {
   @ManyToOne(() => CurrencyEntity, (currency) => currency.sellRates, { onDelete: 'CASCADE' })
   @JoinColumn()
   clientCurrencySell: CurrencyEntity;
+
+  /** Actions */
+
+  @BeforeInsert()
+  setSymbol() {
+    this.symbol = `${this.clientCurrencySell.symbol}-to-${this.clientCurrencyBuy.symbol}`.toLocaleLowerCase();
+  }
+
+  @BeforeUpdate()
+  updateSymbol() {
+    this.setSymbol();
+  }
 }

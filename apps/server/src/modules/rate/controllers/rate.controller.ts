@@ -29,6 +29,8 @@ export class RateController {
   public async create(
     @Body() dto: RateCreateDto,
   ) {
+    // console.log(dto)
+    // return dto;
     return await this.service.create(dto);
   }
 

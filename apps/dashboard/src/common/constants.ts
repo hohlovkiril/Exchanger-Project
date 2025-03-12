@@ -1,6 +1,7 @@
 /** Services Constants */
 
 export const SERVER_URI: string = 'http://localhost:3030'
+export const WS_SERVER_NOTIFICATION_URI: string = 'ws://localhost:8000';
 
 /** CSS Constants */
 

@@ -1,8 +1,10 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import {
+  AnonymUser,
   OrderStatus,
   RecipientData,
 } from "src/common";
+import { UserEntity } from "./user.entity";
 
 @Entity({
   name: 'order'
@@ -20,11 +22,20 @@ export class OrderEntity {
   @Column({ type: 'json' })
   recipientData: RecipientData;
 
+  @Column({ type: 'text', nullable: false })
+  rateCacheData: string;
+
   @Column({ type: 'float', nullable: false })
   clientBuy: number;
 
   @Column({ type: 'float', nullable: false })
   clientSell: number;
+
+  @Column({ type: 'json', nullable: true })
+  clientAnonym: AnonymUser;
+
+  @Column({ type: 'text', nullable: false })
+  clientCacheData: string;
   
   @Column({
     type: 'timestamp with time zone',
@@ -37,4 +48,10 @@ export class OrderEntity {
     default: () => 'CURRENT_TIMESTAMP',
   })
   public updatedAt: Date;
+
+  /** Relatations */
+
+  @ManyToOne(() => UserEntity, (client) => client.orders, { onDelete: 'SET NULL', nullable: true })
+  @JoinColumn()
+  client: UserEntity;
 }

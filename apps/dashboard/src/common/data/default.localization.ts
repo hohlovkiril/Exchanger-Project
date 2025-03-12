@@ -114,6 +114,9 @@ export const defaultLocalization: Localization = {
 
       /** Page Titles */
       'page_title_by_path_/': 'Главная',
+      'page_title_by_path_/currency': 'Валюта',
+      'page_title_by_path_/currency/create': 'Создать Валюту',
+      'page_title_by_path_/rate': 'Курс',
       'page_title_by_path_/profile': 'Профиль',
       'page_title_by_path_/profile/account': 'Профиль',
       'page_title_by_path_/profile/change-password': 'Смена пароля',
@@ -121,12 +124,29 @@ export const defaultLocalization: Localization = {
       
       /** Breadcrumbs */
       'page_breadcrumb_by_path_/': 'Главная',
+      'page_breadcrumb_by_path_/currency': 'Валюта',
+      'page_breadcrumb_by_path_/currency/create': 'Создать Валюту',
+      'page_breadcrumb_by_path_/rate': 'Курс',
       'page_breadcrumb_by_path_/profile': 'Профиль',
       'page_breadcrumb_by_path_/profile/account': 'Профиль',
       'page_breadcrumb_by_path_/profile/change-password': 'Смена пароля',
       'page_breadcrumb_by_path_/profile/settings': 'Настройки Аккаунта',
 
+      /** Widgers */
+
       /** Pages */
+
+      // Forms
+      'page__form_btn_save': 'Сохранить',
+      'page__form_btn_remove': 'Удалить',
+
+      // Currency
+      'page__currency_list_btn_add': 'Добавить Валюту',
+      'page__currency_list_btn_refresh': 'Обновить',
+
+      // Rate
+      'page__rate_list_btn_add': 'Добавить Курс',
+      'page__rate_list_btn_refresh': 'Обновить',
 
       // Profile
       'page__profile_tab_my_account': 'Мой Аккаунт',

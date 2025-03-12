@@ -2,6 +2,7 @@ import React from "react";
 
 import {
   CurrencyType,
+  NotificationVariants,
 } from '@shared/enums';
 
 /** Router types */
@@ -101,7 +102,7 @@ export type CredentialsField = {
 
 export type NotificationType = {
   id: number;
-  type: any;
+  variant: NotificationVariants;
   text: string;
   createdAt: Date;
 }
@@ -124,16 +125,20 @@ export type CurrencyDataType = {
   id: number;
   label: string;
   symbol: string;
+  apiSymbol?: string;
   precision: number;
   scale: number;
   regex?: string;
   type: CurrencyType;
   minimal: number;
   reserve: number;
+  buyRates: RateDataType[];
+  sellRates: RateDataType[];
 }
 
 export type RateDataType = {
   id: number;
+  symbol: string;
   status: boolean;
   price: number;
   autoUpdatePrice: boolean;

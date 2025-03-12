@@ -5,6 +5,7 @@ export class CurrencyGetManyDto {}
 export class CurrencyCreateDto {
   label: string;
   symbol: string;
+  apiSymbol?: string;
   precision?: number;
   scale?: number;
   regex?: string;
@@ -17,6 +18,7 @@ export class CurrencyCreateDto {
 export class CurrencyUpdateDto {
   label?: string;
   symbol?: string;
+  apiSymbol?: string;
   precision?: number;
   scale?: number;
   regex?: string;

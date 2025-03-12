@@ -31,7 +31,6 @@ export default function DataView(props: IDataViewProps) {
   const [orderBy, setOrderBy] = useState<string>('');
   const [selected, setSelected] = useState<readonly number[]>([]);
   const [page, setPage] = useState(0);
-  const [dense, setDense] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   /** Handlers */
@@ -83,10 +82,7 @@ export default function DataView(props: IDataViewProps) {
   };
 
   /** Vars */
-
-  const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - props.rows.length) : 0;
-
+  
   const visibleRows = [...props.rows]
     .sort(getComparator(order, orderBy))
     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -161,7 +157,6 @@ export default function DataView(props: IDataViewProps) {
               <TableBody>
                 {visibleRows.map((row, rowKey) => {
                   const isItemSelected = selected.includes(row.id);
-                  const labelId = `enhanced-table-checkbox-${rowKey}`;
 
                   return (
                     <TableRow
@@ -179,9 +174,6 @@ export default function DataView(props: IDataViewProps) {
                           <Checkbox
                             color="primary"
                             checked={isItemSelected}
-                            inputProps={{
-                              'aria-labelledby': labelId,
-                            }}
                           />
                         </TableCell>
                       )}
@@ -209,18 +201,6 @@ export default function DataView(props: IDataViewProps) {
                     </TableRow>
                   );
                 })}
-                {emptyRows > 0 && (
-                  <TableRow
-                    style={{
-                      height: (dense ? 33 : 53) * (emptyRows),
-                    }}
-                  >
-                    <TableCell colSpan={props.selected
-                      ? props.columns.length + 1
-                      : props.columns.length
-                    } />
-                  </TableRow>
-                )}
               </TableBody>
             </Table>
           </>

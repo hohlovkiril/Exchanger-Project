@@ -11,6 +11,15 @@ export enum Permission {
   
 }
 
+// Notification
+
+export enum NotificationVariants {
+  Info,
+  Success,
+  Warning,
+  Error,
+}
+
 // Currency
 
 export enum CurrencyType {

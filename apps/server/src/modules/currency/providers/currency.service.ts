@@ -1,10 +1,12 @@
 import { BadRequestException, Injectable, Logger, NotFoundException, OnModuleInit } from "@nestjs/common";
+import { EventEmitter2 } from "@nestjs/event-emitter";
 import { InjectRepository } from "@nestjs/typeorm";
-import { CurrencyType } from "@shared/enums";
+import { CurrencyType, NotificationVariants } from "@shared/enums";
 import { CurrencyCreateDto, CurrencyGetManyDto, CurrencyUpdateDto } from "src/dto";
 import { CurrencyEntity } from "src/entities";
+import { NotificationCreateEvent } from "src/events";
 import { MediaService } from "src/modules/media/providers/media.service";
-import { Repository, SelectQueryBuilder, ILike } from "typeorm";
+import { Repository, SelectQueryBuilder, ILike, Not } from "typeorm";
 
 @Injectable()
 export class CurrencyService implements OnModuleInit {
@@ -15,6 +17,7 @@ export class CurrencyService implements OnModuleInit {
     @InjectRepository(CurrencyEntity) 
     private readonly repository: Repository<CurrencyEntity>,
     private readonly mediaService: MediaService,
+    private readonly eventEmitter: EventEmitter2,
   ) {}
 
   async onModuleInit() {
@@ -33,7 +36,9 @@ export class CurrencyService implements OnModuleInit {
     return await this.repository.createQueryBuilder('currency')
       .leftJoinAndSelect('currency.icon', 'icon')
       .leftJoinAndSelect('currency.buyRates', 'buyRates')
-      .leftJoinAndSelect('currency.sellRates', 'sellRates');
+      .leftJoinAndSelect('buyRates.clientCurrencySell', 'clientCurrencySell')
+      .leftJoinAndSelect('currency.sellRates', 'sellRates')
+      .leftJoinAndSelect('sellRates.clientCurrencyBuy', 'clientCurrencyBuy');
   }
 
   public async findOneByIdOrNull(id: number): Promise<CurrencyEntity | null> {
@@ -66,16 +71,28 @@ export class CurrencyService implements OnModuleInit {
 
   public async create(payload: CurrencyCreateDto): Promise<CurrencyEntity> {
     const checkoutLabel = await this.repository.findOneBy({ label: ILike(payload.label) });
-
+    const checkoutSymbol = await this.repository.findOneBy({ symbol: ILike(payload.symbol) });
+    
     if (checkoutLabel) {
-      throw new BadRequestException(`Currency with label: ${payload.label} already exists!`);
+      throw new BadRequestException(
+        `Currency with label: ${payload.label} already exists!`
+      );
+    } else if (checkoutSymbol) {
+      throw new BadRequestException(
+        `Currency with symbol: ${payload.symbol} already exists!`
+      );
     }
+    
 
     const newCurrency = await this.repository.create();
     newCurrency.label = payload.label;
     newCurrency.symbol = payload.symbol;
     newCurrency.minimal = payload.minimal;
     newCurrency.reserve = payload.reserve;
+
+    if (payload.apiSymbol !== undefined) {
+      newCurrency.apiSymbol = payload.apiSymbol;
+    }
 
     if (payload.precision !== undefined) {
       newCurrency.precision = payload.precision;
@@ -101,6 +118,14 @@ export class CurrencyService implements OnModuleInit {
       }
     }
 
+    const event = new NotificationCreateEvent(
+      `New Currency: ${newCurrency.label} Created!`,
+      undefined,
+      NotificationVariants.Info
+    )
+
+    this.eventEmitter.emit('notification.create', event);
+
     return await this.repository.save(newCurrency);
   }
 
@@ -108,7 +133,7 @@ export class CurrencyService implements OnModuleInit {
     const currency = await this.findOneByIdOrFailed(id);
 
     if (payload.label !== undefined) {
-      const checkoutLabel = await this.repository.findOneBy({ label: ILike(payload.label) });
+      const checkoutLabel = await this.repository.findOneBy({ id: Not(id), label: ILike(payload.label) });
 
       if (checkoutLabel) {
         throw new BadRequestException(`Currency with label: ${payload.label} already exists!`);
@@ -118,7 +143,17 @@ export class CurrencyService implements OnModuleInit {
     }
 
     if (payload.symbol !== undefined) {
+      const checkoutSymbol = await this.repository.findOneBy({ id: Not(id), symbol: ILike(payload.symbol) });
+
+      if (checkoutSymbol) {
+        throw new BadRequestException(`Currency with symbol: ${payload.symbol} already exists!`);
+      }
+
       currency.symbol = payload.symbol;
+    }
+
+    if (payload.apiSymbol !== undefined) {
+      currency.apiSymbol = payload.apiSymbol;
     }
 
     if (payload.minimal !== undefined) {
@@ -157,6 +192,14 @@ export class CurrencyService implements OnModuleInit {
         currency.icon = media;
       }
     }
+
+    const event = new NotificationCreateEvent(
+      `Currency: ${currency.label} Updated!`,
+      undefined,
+      NotificationVariants.Info
+    )
+
+    this.eventEmitter.emit('notification.create', event);
 
     return await this.repository.save(currency);
   }

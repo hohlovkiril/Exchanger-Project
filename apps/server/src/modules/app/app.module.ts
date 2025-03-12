@@ -10,6 +10,9 @@ import { AuthHttpGuard } from "src/guards/auth.http.guard";
 import { JwtModule } from "@nestjs/jwt";
 import { AuthModule } from "../auth/auth.module";
 import { RateModule } from "../rate/rate.module";
+import { OrderModule } from "../order/order.module";
+import { NotificationModule } from "../notification/notification.module";
+import { EventEmitter2, EventEmitterModule } from "@nestjs/event-emitter";
 
 @Module({
   imports: [
@@ -28,12 +31,17 @@ import { RateModule } from "../rate/rate.module";
         secret: config.get<string>('JWT_SECRET'),
       })
     }),
+    EventEmitterModule.forRoot({
+      global: true,
+    }),
     DatabaseModule,
     AuthModule,
     UserModule,
     MediaEntity,
     CurrencyModule,
     RateModule,
+    OrderModule,
+    NotificationModule,
   ],
   providers: [
     {

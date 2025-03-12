@@ -3,8 +3,10 @@ import {
   Permission,
   CurrencyType,
   OrderStatus,
+  NotificationVariants,
 } from '@shared/enums';
 import {
+  AnonymUser,
   RecipientCryptoData,
   RecipientFiatData,
   RecipientData,
@@ -36,7 +38,9 @@ export {
   Permission,
   CurrencyType,
   OrderStatus,
+  NotificationVariants,
   // Types
+  AnonymUser,
   RecipientCryptoData,
   RecipientFiatData,
   RecipientData,

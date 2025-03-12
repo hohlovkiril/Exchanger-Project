@@ -21,12 +21,16 @@ import { useAuth } from "../../../providers/auth.provider";
 import { DataView } from "../../../components/widgets";
 import { IDataViewColumnsConfig } from "../../../components/widgets/DataView/common";
 import { InputAdornment } from "@mui/material";
-import { Avatar } from "../../../components/ui/DataDisplay";
+import { Avatar, Chip } from "../../../components/ui/DataDisplay";
+import { CurrencyApi } from "../../../services/api";
+import { CurrencyType } from "@shared/enums";
+import { useTranslation } from "react-i18next";
 
 export default function CurrencyListPage() {
 
   /** Context */
 
+  const { t } = useTranslation();
   const { token } = useAuth();
 
   /** States */
@@ -42,15 +46,13 @@ export default function CurrencyListPage() {
 
     if (loaded) return;
 
-    fetch('http://localhost:3030/api/currency', {
-      method: 'GET',
-      headers: new Headers({
-        'Authorization': `Bearer ${token}`
-      })
-    })
-    .then((res) => res.json())
-    .then((data) => setData(data))
-    .finally(() => setLoaded(true));
+    const timer = setTimeout(() => {
+      CurrencyApi.getMany(token)
+        .then((data) => setData(data))
+        .finally(() => setLoaded(true));
+    }, 250)
+
+    return () => clearTimeout(timer);
   }, [token, loaded])
 
   /** Vars */
@@ -74,13 +76,31 @@ export default function CurrencyListPage() {
         >
           <Avatar>{row.label.slice(0, 1)}</Avatar>
           {row.label}
+          <Chip
+            label={row.type === CurrencyType.CRYPTO ? 'Crypto' : 'Fiat'}
+          />
         </Stack>
       )
     },
     {
       id: 'symbol',
       label: 'Symbol',
-      align: 'left',
+      align: 'center',
+      renderCell: (row) => (
+        <Chip
+          label={row.symbol}
+        />
+      )
+    },
+    {
+      id: 'apiSymbol',
+      label: 'API Symbol',
+      align: 'center',
+      renderCell: (row) => (
+        <Chip
+          label={row.apiSymbol}
+        />
+      )
     },
     {
       id: 'minimal',
@@ -89,7 +109,7 @@ export default function CurrencyListPage() {
     },
     {
       id: 'reserve',
-      label: 'Minimal',
+      label: 'Reserve',
       align: 'right',
     },
     {
@@ -176,7 +196,7 @@ export default function CurrencyListPage() {
                       color='primary'
                       startIcon={<AddIcon />}
                     >
-                      Add Currency
+                      {t('page__currency_list_btn_add', { defaultValue: 'Add Currency' })}
                     </Button>
                   </Link>
                   <Button
@@ -185,7 +205,7 @@ export default function CurrencyListPage() {
                     startIcon={<RestartAltIcon />}
                     onClick={() => setLoaded(false)}
                   >
-                    Refresh
+                    {t('page__currency_list_btn_refresh', { defaultValue: 'Refresh' })}
                   </Button>
                 </Stack>
 
