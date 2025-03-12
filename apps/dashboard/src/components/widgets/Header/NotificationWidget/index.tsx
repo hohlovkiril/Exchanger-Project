@@ -83,7 +83,7 @@ export default function NotificationWidget() {
     <>
       <IconButton
         enableBadge={{
-          content: notifications.filter((noty) => noty.checked).length,
+          content: notifications.filter((noty) => !noty.checked).length,
           color: 'primary'
         }}
         enableTooltip={{
