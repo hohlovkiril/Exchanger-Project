@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, Generated, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import {
   AnonymUser,
   OrderStatus,
@@ -13,8 +13,9 @@ export class OrderEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'int', unique: true, nullable: false })
-  publicId: number;
+  @Column()
+  @Generated('uuid')
+  uuid: number;
 
   @Column({ type: 'enum', enum: OrderStatus, default: OrderStatus.WAITING_CONFIRM })
   status: OrderStatus;

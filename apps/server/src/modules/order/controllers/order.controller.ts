@@ -1,6 +1,7 @@
 import { Body, Controller, Delete, Get, Logger, Param, ParseIntPipe, Patch, Post, Query } from "@nestjs/common";
 import { OrderService } from "../providers/order.service";
 import { OrderCreateDto, OrderGetManyDto, OrderUpdateDto } from "src/dto";
+import { User } from "src/common";
 
 @Controller('/api/order')
 export class OrderController {
@@ -28,8 +29,9 @@ export class OrderController {
   @Post()
   public async create(
     @Body() dto: OrderCreateDto,
+    @User() user: any,
   ) {
-    return await this.service.create(dto);
+    return await this.service.create({ ...dto, client: user });
   }
 
   @Patch(':id')

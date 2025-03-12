@@ -144,7 +144,7 @@ export default class RateApi extends BaseApi {
    */
   public static async remove(access_token: string, id: number | string): Promise<RateDataType> {
     try {
-      const request = await fetch(`${SERVER_URI}/api/currency/${id}`, {
+      const request = await fetch(`${SERVER_URI}/api/rate/${id}`, {
         method: 'DELETE',
         headers: RateApi.createHeaders({
           'Authorization': `Bearer ${access_token}`

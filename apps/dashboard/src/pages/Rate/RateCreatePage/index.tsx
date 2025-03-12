@@ -5,7 +5,7 @@ import { useAuth } from "../../../providers/auth.provider";
 import { useLayoutApi } from "../../../providers/layout.provider";
 import RateForm, { RateFormType, RateFormValidation } from '../../../components/widgets/RateForm';
 import { Button } from '../../../components/ui/Inputs';
-import RateApi from '../../../services/api/rate.api';
+import { RateApi } from '../../../services/api';
 import { useTranslation } from 'react-i18next';
 
 export default function RateCreatePage() {
@@ -53,8 +53,8 @@ export default function RateCreatePage() {
     if (!token) return;
 
     RateApi.create(token, form)
-    .then(() => navigate('/rate'))
-    .catch((err) => enqueueSnackbar(err.message, { variant: 'error' }))
+      .then(() => navigate('/rates'))
+      .catch((err) => enqueueSnackbar(err.message, { variant: 'error' }))
   }, [
     form,
     token,

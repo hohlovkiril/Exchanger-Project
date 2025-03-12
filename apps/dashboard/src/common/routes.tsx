@@ -12,6 +12,12 @@ import {
   RateCreatePage,
   RateEditPage,
 } from '../pages/Rate';
+import {
+  OrderListPage,
+} from '../pages/Order';
+import {
+  UserListPage,
+} from '../pages/User'
 import NotificationPage from "../pages/Notification";
 import ProfilePage from "../pages/Profile";
 import SettingsPage from "../pages/Settings";
@@ -41,11 +47,11 @@ export const ROUTES: RouteType[] = [
     breadcrumb: {
       label: 'Currencies'
     },
-    segment: '/currency',
-    path: '/currency',
+    segment: '/currencies',
+    path: '/currencies',
     element: [
       {
-        title: '',
+        title: 'Currencies',
         segment: '/',
         path: '/',
         element: <CurrencyListPage />,
@@ -62,7 +68,7 @@ export const ROUTES: RouteType[] = [
           label: 'Edit',
         },
         segment: '/edit/:id',
-        regex: /^\/currency\/edit\/\d+$/,
+        regex: /^\/currencies\/edit\/\d+$/,
         path: '/edit/:id',
         element: <CurrencyEditPage />,
       }
@@ -74,11 +80,11 @@ export const ROUTES: RouteType[] = [
     breadcrumb: {
       label: 'Rates',
     },
-    segment: '/rate',
-    path: '/rate',
+    segment: '/rates',
+    path: '/rates',
     element: [
       {
-        title: '',
+        title: 'Rates',
         segment: '/',
         path: '/',
         element: <RateListPage />,
@@ -95,10 +101,38 @@ export const ROUTES: RouteType[] = [
           label: 'Edit',
         },
         segment: '/edit/:id',
-        regex: /^\/rate\/edit\/\d+$/,
+        regex: /^\/rates\/edit\/\d+$/,
         path: '/edit/:id',
         element: <RateEditPage />,
       }
+    ]
+  },
+  {
+    isPrivate: true,
+    title: 'Orders',
+    segment: '/orders',
+    path: '/orders',
+    element: [
+      {
+        title: 'Orders',
+        segment: '',
+        path: '/',
+        element: <OrderListPage />,
+      },
+    ]
+  },
+  {
+    isPrivate: true,
+    title: 'Users',
+    segment: '/users',
+    path: '/users',
+    element: [
+      {
+        title: 'Users',
+        segment: '',
+        path: '/',
+        element: <UserListPage />,
+      },
     ]
   },
   {
@@ -111,8 +145,8 @@ export const ROUTES: RouteType[] = [
         title: '',
         segment: '/',
         path: '/',
-        element: <NotificationPage />
-      }
+        element: <NotificationPage />,
+      },
     ]
   },
   {

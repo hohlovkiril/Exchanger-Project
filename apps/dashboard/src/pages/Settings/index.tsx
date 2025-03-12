@@ -113,9 +113,6 @@ export default function SettingsPage() {
                 ))}
               </Tabs>
             )}
-            sx={{
-              padding: '0',
-            }}
           />
           <CardContent>
             {tabs.filter((_) => _.enable === true).map((panel, key) => (

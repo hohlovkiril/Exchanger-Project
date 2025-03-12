@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, Logger, Param, ParseIntPipe, Patch, Post
 import { UserService } from "../providers/user.service";
 import { UserCreateDto, UserGetManyDto, UserUpdateDto } from "src/dto";
 
-@Controller('user')
+@Controller('/api/user')
 export class UserController {
 
   private readonly logger: Logger = new Logger(UserController.name);

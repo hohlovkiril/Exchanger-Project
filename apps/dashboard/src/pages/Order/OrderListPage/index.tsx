@@ -1,33 +1,26 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { useSnackbar } from "notistack";
+
+import { InputAdornment } from "@mui/material";
 
 import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@mui/icons-material/Add';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 
-import {
-  Button,
-  IconButton,
-  TextField,
-} from '../../../components/ui/Inputs';
-import {
-  Box,
-  Stack,
-  Container,
-} from '../../../components/ui/Surfaces';
-import { CurrencyDataType } from "../../../common/types";
 import { useAuth } from "../../../providers/auth.provider";
-import { DataView } from "../../../components/widgets";
+import { OrderDataType } from "../../../common/types";
 import { IDataViewColumnsConfig } from "../../../components/widgets/DataView/common";
-import { InputAdornment } from "@mui/material";
-import { Avatar, Chip } from "../../../components/ui/DataDisplay";
-import { CurrencyApi } from "../../../services/api";
-import { CurrencyType } from "@shared/enums";
-import { useTranslation } from "react-i18next";
-import { useSnackbar } from "notistack";
+import { Box, Container, Stack } from "../../../components/ui/Surfaces";
+import { DataView } from "../../../components/widgets";
+import { Button, IconButton, TextField } from "../../../components/ui/Inputs";
+import { OrderApi } from "../../../services";
+import { Chip } from "../../../components/ui/DataDisplay";
+import { OrderStatus } from "@shared/enums";
 
-export default function CurrencyListPage() {
+export default function OrderListPage() {
 
   /** Context */
 
@@ -38,7 +31,7 @@ export default function CurrencyListPage() {
   /** States */
 
   const [query, setQuery] = useState<string>('');
-  const [data, setData] = useState<CurrencyDataType[]>([]);
+  const [data, setData] = useState<OrderDataType[]>([]);
   const [loaded, setLoaded] = useState<boolean>(false);
 
   /** Effects */
@@ -49,75 +42,76 @@ export default function CurrencyListPage() {
     if (loaded) return;
 
     const timer = setTimeout(() => {
-      CurrencyApi.getMany(token)
+      OrderApi.getMany(token)
         .then((data) => setData(data))
         .catch((err) => enqueueSnackbar(err.message, { variant: 'warning' }))
         .finally(() => setLoaded(true));
-    }, 250)
+    }, 250);
 
     return () => clearTimeout(timer);
   }, [
     token,
     loaded,
-    enqueueSnackbar
+    enqueueSnackbar,
   ])
 
   /** Vars */
 
-  const cols: IDataViewColumnsConfig<CurrencyDataType>[] = [
+  const cols: IDataViewColumnsConfig<OrderDataType>[] = [
     {
       id: 'id',
       label: '#',
       align: 'center',
     },
     {
-      id: 'label',
-      label: 'Currency info',
-      align: 'left',
+      id: 'uuid',
+      label: 'Order ID',
+      align: 'center',
       renderCell: (row) => (
-        <Stack
-          direction='row'
-          justifyContent='flex-start'
-          alignItems='center'
-          gap={1}
-        >
-          <Avatar>{row.label.slice(0, 1)}</Avatar>
-          {row.label}
+        <Chip
+          label={row.uuid}
+        />
+      )
+    },
+    {
+      id: 'status',
+      label: 'Status',
+      align: 'center',
+      renderCell: (row) => (
+        <Chip
+          label={OrderStatus[row.status].replaceAll('_', ' ')}
+        />
+      )
+    },
+    {
+      id: 'clientBuy',
+      label: 'Buy',
+      align: 'center',
+      renderCell: (row) => {
+        const symbol = JSON.parse(row.rateCacheData)
+          .clientCurrencyBuy.symbol;
+
+        return (
           <Chip
-            label={row.type === CurrencyType.CRYPTO ? 'Crypto' : 'Fiat'}
+            label={`${row.clientBuy} ${symbol}`}
           />
-        </Stack>
-      )
+        )
+      }
     },
     {
-      id: 'symbol',
-      label: 'Symbol',
+      id: 'clientSell',
+      label: 'Sell',
       align: 'center',
-      renderCell: (row) => (
-        <Chip
-          label={row.symbol}
-        />
-      )
-    },
-    {
-      id: 'apiSymbol',
-      label: 'API Symbol',
-      align: 'center',
-      renderCell: (row) => (
-        <Chip
-          label={row.apiSymbol}
-        />
-      )
-    },
-    {
-      id: 'minimal',
-      label: 'Minimal',
-      align: 'right',
-    },
-    {
-      id: 'reserve',
-      label: 'Reserve',
-      align: 'right',
+      renderCell: (row) => {
+        const symbol = JSON.parse(row.rateCacheData)
+          .clientCurrencySell.symbol;
+
+        return (
+          <Chip
+            label={`${row.clientSell} ${symbol}`}
+          />
+        )
+      }
     },
     {
       id: 'id',
@@ -125,7 +119,7 @@ export default function CurrencyListPage() {
       align: 'center',
       disableOrder: true,
       renderCell: (row) => (
-        <Link to={`/currencies/edit/${row.id}`}>
+        <Link to={`/orders/edit/${row.id}`}>
           <IconButton>
             <RemoveRedEyeIcon />
           </IconButton>
@@ -134,15 +128,7 @@ export default function CurrencyListPage() {
     }
   ];
 
-  const rows = query ? data.filter((value) => {
-    if (value.label.toLocaleLowerCase().includes(query.toLocaleLowerCase())) {
-      return value;
-    } else if (value.symbol.toLocaleLowerCase().includes(query.toLocaleLowerCase())) {
-      return value;
-    } else {
-      return null;
-    }
-  }) : data;
+  const rows = data;
 
   return (
     <>
@@ -197,7 +183,7 @@ export default function CurrencyListPage() {
                   alignItems='center'
                   gap={1}
                 >
-                  <Link to="/currencies/create">
+                  <Link to="/order/create">
                     <Button
                       variant='contained'
                       color='primary'

@@ -44,7 +44,7 @@ export default function CurrencyEditPage() {
     if (!id) return;
 
     CurrencyApi.update(token, id, form)
-    .then(() => navigate('/currency'))
+    .then(() => navigate('/currencies'))
     .catch((err) => enqueueSnackbar(err.message, { variant: 'error' }))
   }, [
     id,
@@ -61,7 +61,7 @@ export default function CurrencyEditPage() {
 
     CurrencyApi.remove(token, id)
       .then(() => {
-        navigate('/currency');
+        navigate('/currencies');
         enqueueSnackbar('Currency removed!', { variant: 'info' });
       })
       .catch((err) => enqueueSnackbar(err.message, { variant: 'error' }))
@@ -81,10 +81,14 @@ export default function CurrencyEditPage() {
 
     CurrencyApi.getOne(token, id)
     .then((data) => setForm(data))
-    .catch((err) => enqueueSnackbar(err.message, { variant: 'error' }))
+    .catch((err) => {
+      navigate('/currencies')
+      enqueueSnackbar(err.message, { variant: 'error' });
+    })
   }, [
     id,
     token,
+    navigate,
     enqueueSnackbar,
   ])
 

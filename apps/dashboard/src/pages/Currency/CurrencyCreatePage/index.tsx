@@ -40,7 +40,7 @@ export default function CurrencyCreatePage() {
     if (!token) return;
 
     CurrencyApi.create(token, form)
-    .then(() => navigate('/currency'))
+    .then(() => navigate('/currencies'))
     .catch((err) => enqueueSnackbar(err.message, { variant: 'error' }))
   }, [
     token,

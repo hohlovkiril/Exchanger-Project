@@ -3,7 +3,12 @@ import React from "react";
 import {
   CurrencyType,
   NotificationVariants,
+  OrderStatus,
 } from '@shared/enums';
+import {
+  RecipientData,
+  AnonymUser,
+} from '@shared/types'
 
 /** Router types */
 
@@ -145,6 +150,21 @@ export type RateDataType = {
   autoUpdatePrice: boolean;
   clientCurrencyBuy: CurrencyDataType;
   clientCurrencySell: CurrencyDataType;
+}
+
+export type OrderDataType = {
+  id: number;
+  uuid: string;
+  status: OrderStatus;
+  recipientData: RecipientData;
+  rateCacheData: string;
+  clientBuy: number;
+  clientSell: number;
+  client?: UserType;
+  clientAnonym?: AnonymUser;
+  clientCacheData: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 /**

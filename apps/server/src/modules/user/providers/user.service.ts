@@ -161,7 +161,7 @@ export class UserService {
     const query = await this.createBuilder();
 
     query.where('1 = 1')
-      // .andWhere('user.role != :role', { role: Role.Root });
+      .andWhere('user.role != :role', { role: Role.Root });
 
     query.orderBy('user.id', 'DESC');
 

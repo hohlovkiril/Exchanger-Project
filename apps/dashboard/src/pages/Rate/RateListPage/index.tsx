@@ -22,7 +22,7 @@ import { DataView } from "../../../components/widgets";
 import { IDataViewColumnsConfig } from "../../../components/widgets/DataView/common";
 import { InputAdornment } from "@mui/material";
 import { Chip } from "../../../components/ui/DataDisplay";
-import RateApi from '../../../services/api/rate.api';
+import { RateApi } from '../../../services/api';
 import { useTranslation } from 'react-i18next';
 
 export default function RateListPage() {
@@ -110,7 +110,7 @@ export default function RateListPage() {
       align: 'center',
       disableOrder: true,
       renderCell: (row) => (
-        <Link to={`/rate/edit/${row.id}`}>
+        <Link to={`/rates/edit/${row.id}`}>
           <IconButton>
             <RemoveRedEyeIcon />
           </IconButton>
@@ -174,7 +174,7 @@ export default function RateListPage() {
                   alignItems='center'
                   gap={1}
                 >
-                  <Link to="/rate/create">
+                  <Link to="/rates/create">
                     <Button
                       variant='contained'
                       color='primary'

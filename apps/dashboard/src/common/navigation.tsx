@@ -1,6 +1,8 @@
 import HomeIcon from '@mui/icons-material/Home';
 import CurrencyBitcoinIcon from '@mui/icons-material/CurrencyBitcoin';
-import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
+import PriceChangeIcon from '@mui/icons-material/PriceChange';
+import ReceiptIcon from '@mui/icons-material/Receipt';
+import PeopleIcon from '@mui/icons-material/People';
 import SettingsIcon from '@mui/icons-material/Settings';
 
 import { NavigationItemType } from "./types";
@@ -21,16 +23,28 @@ export const DASHBOARD_NAVIGATION: NavigationItemType[] = [
   },
   {
     kind: 'link',
-    title: 'Currency',
-    url: '/currency',
+    title: 'Currencies',
+    url: '/currencies',
     icon: <CurrencyBitcoinIcon />,
   },
   {
     kind: 'link',
-    title: 'Rate',
-    url: '/rate',
-    icon: <CurrencyExchangeIcon />,
-  }
+    title: 'Rates',
+    url: '/rates',
+    icon: <PriceChangeIcon />,
+  },
+  {
+    kind: 'link',
+    title: 'Orders',
+    url: '/orders',
+    icon: <ReceiptIcon />,
+  },
+  {
+    kind: 'link',
+    title: 'Users',
+    url: '/users',
+    icon: <PeopleIcon />,
+  },
 ]
 
 export const SETTINGS_NAVIGATION: NavigationItemType[] = [

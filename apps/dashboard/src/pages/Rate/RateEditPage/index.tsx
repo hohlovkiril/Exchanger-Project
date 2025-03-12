@@ -7,7 +7,7 @@ import { useTheme } from "../../../providers/theme.provider"
 import { useAuth } from "../../../providers/auth.provider";
 import { useLayoutApi } from "../../../providers/layout.provider";
 import RateForm, { RateFormType, RateFormValidation } from "../../../components/widgets/RateForm";
-import RateApi from "../../../services/api/rate.api";
+import { RateApi } from "../../../services/api";
 import { Button } from "../../../components/ui/Inputs";
 
 export default function RateEditPage() {
@@ -39,7 +39,7 @@ export default function RateEditPage() {
     if (!id) return;
 
     RateApi.update(token, id, form)
-      .then(() => navigate('/rate'))
+      .then(() => navigate('/rates'))
       .catch((err) => enqueueSnackbar(err.message, { variant: 'error' }));
   }, [
     id,
@@ -56,7 +56,7 @@ export default function RateEditPage() {
 
     RateApi.remove(token, id)
       .then(() => {
-        navigate('/rate');
+        navigate('/rates');
         enqueueSnackbar('Rate removed!', { variant: 'info' });
       })
       .catch((err) => enqueueSnackbar(err.message, { variant: 'error' }))
@@ -76,10 +76,14 @@ export default function RateEditPage() {
 
     RateApi.getOne(token, id)
       .then((data) => setForm(data))
-      .catch((err) => enqueueSnackbar(err.message, { variant: 'error' }));
+      .catch((err) => {
+        navigate('/rates');
+        enqueueSnackbar(err.message, { variant: 'error' });
+      });
   }, [
     id,
     token,
+    navigate,
     enqueueSnackbar,
   ])
 

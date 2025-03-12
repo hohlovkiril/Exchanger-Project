@@ -34,7 +34,7 @@ export class RateEntity {
 
   @BeforeInsert()
   setSymbol() {
-    this.symbol = `${this.clientCurrencySell.symbol}-to-${this.clientCurrencyBuy.symbol}`.toLocaleLowerCase();
+    this.symbol = `${this.clientCurrencyBuy.symbol}-to-${this.clientCurrencySell.symbol}`.toLocaleLowerCase();
   }
 
   @BeforeUpdate()
