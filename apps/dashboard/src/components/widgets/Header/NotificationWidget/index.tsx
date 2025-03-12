@@ -124,7 +124,7 @@ export default function NotificationWidget() {
         }}
       >
 
-        {notifications ? (
+        {notifications.length > 0 ? (
           <>
             <List
               sx={{

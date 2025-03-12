@@ -41,8 +41,9 @@ export const NotificationProvider: React.FC<INotificationProvider> = ({ children
         }
       }));
     } else {
-
-      socket.connect();
+      if (!socket.connected) {
+        socket.connect();
+      }
 
       if (!loaded) {
         socket.emit('get.notifications', {});
@@ -75,7 +76,6 @@ export const NotificationProvider: React.FC<INotificationProvider> = ({ children
   }, [
     token,
     socket,
-    socket?.connected,
     data,
     loaded,
     enqueueSnackbar,

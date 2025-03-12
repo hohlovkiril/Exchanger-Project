@@ -28,7 +28,7 @@ export class UserService {
       .leftJoinAndSelect('user.avatar', 'avatar')
   }
 
-  public ask(query: string): Promise<string> {
+  private ask(query: string): Promise<string> {
     this.rl = readline.createInterface({
       input: process.stdin,
       output: process.stdout,
@@ -160,7 +160,8 @@ export class UserService {
   public async findMany(payload: UserGetManyDto): Promise<UserEntity[]> {
     const query = await this.createBuilder();
 
-    query.where('1 = 1');
+    query.where('1 = 1')
+      // .andWhere('user.role != :role', { role: Role.Root });
 
     query.orderBy('user.id', 'DESC');
 
